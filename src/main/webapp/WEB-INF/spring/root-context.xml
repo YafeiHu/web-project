@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+	<!-- Root Context: defines shared resources visible to all other web components -->
+
+
+
+
+
+	<!-- spring security -->
+	<bean id="CustomerUserDetailService" class="edu.neu.coe.api.service.impl.CustomerUserDetailService" />
+	<security:http auto-config="true" use-expressions="true"
+		access-denied-page="/powermiss">
+
+		
+		<security:intercept-url pattern="/login"
+			access="permitAll" />
+		<security:intercept-url pattern="/admin/**"
+			access="hasRole('ADMIN')" />
+		<!-- 对所有的资源，都必须要有COMM权限 才可以访问 -->
+		<!--security:intercept-url pattern="/*" access="hasRole('COMM')" /> -->
+		<!-- 配置登录页面为login.jsp ，登录成功默认跳转到index.jsp，登录失败返回login.jsp并携带参数error=true -->
+		<security:form-login login-page="/login"
+			default-target-url="http://localhost:8081/coe/user/success"
+			authentication-failure-url="/login?error=true" />
+		<!-- 退出配置 -->
+		<security:logout invalidate-session="true"
+			logout-success-url="/login" />
+
+	</security:http>
+
+	<!-- 配置一个认证管理器 -->
+	<security:authentication-manager>
+		<!-- 使用自定义的UserDetailService -->
+		<security:authentication-provider
+			user-service-ref="CustomerUserDetailService">
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+	<context:annotation-config />
+	<context:component-scan base-package="edu.neu.coe" />
+	<mvc:annotation-driven />
+</beans>

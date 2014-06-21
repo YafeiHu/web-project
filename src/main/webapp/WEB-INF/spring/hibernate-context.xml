@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+	
+	
+	<!--hibernate -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/final" />
+		<property name="username" value="root" />
+		<property name="password" value="bitnami" />
+	</bean>
+
+	<!--Session Factory Declaration -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="annotatedClasses">
+			<list>
+				<value>edu.neu.coe.api.model.City</value>
+				<value>edu.neu.coe.api.model.Country</value>
+				<value>edu.neu.coe.api.model.Food</value>
+				<value>edu.neu.coe.api.model.FoodRating</value>
+				<value>edu.neu.coe.api.model.Role</value>
+				<value>edu.neu.coe.api.model.Sight</value>
+				<value>edu.neu.coe.api.model.SightRating</value>
+				<value>edu.neu.coe.api.model.User</value>
+				<value>edu.neu.coe.api.model.Photo</value>
+				<value>edu.neu.coe.api.model.Continent</value>
+				<value>edu.neu.coe.api.model.UserPhoto</value>
+				<value>edu.neu.coe.api.model.FoodPhoto</value>
+				<value>edu.neu.coe.api.model.SightPhoto</value>
+				<value>edu.neu.coe.api.model.CityPhoto</value>
+				<value>edu.neu.coe.api.model.CountryPhoto</value>
+				<value>edu.neu.coe.api.model.Topic</value>
+				<value>edu.neu.coe.api.model.Reply</value>
+			</list>
+		</property>
+	</bean>
+
+
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+
+</beans>
